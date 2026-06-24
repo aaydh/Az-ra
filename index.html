@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قصة عزام ورغد</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom Styles for the Novel Experience */
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #2a2a2a; 
+            background-image: radial-gradient(circle at center, #3a3a3a 0%, #1a1a1a 100%);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        h1, h2, h3, .serif-font {
+            font-family: 'Amiri', serif;
+        }
+
+        /* The Book Paper Texture */
+        .paper {
+            background-color: #fdf6e3;
+            background-image: url('data:image/svg+xml,%3Csvg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100" height="100" filter="url(%23noise)" opacity="0.05"/%3E%3C/svg%3E');
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.05), 0 10px 25px rgba(0,0,0,0.5);
+            color: #333;
+        }
+
+        /* Page Flip Animation Classes (Adjusted for RTL) */
+        .page-container {
+            position: relative;
+            perspective: 1500px;
+        }
+        
+        .page {
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none;
+            transform: rotateY(-10deg);
+            transform-origin: right center; /* Hinge on the right for Arabic */
+        }
+
+        .page.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: rotateY(0deg);
+            position: relative;
+        }
+
+        .page.prev {
+            transform: rotateY(10deg);
+        }
+
+        /* Romantic touches */
+        .divider {
+            width: 50%;
+            height: 1px;
+            background: linear-gradient(to left, transparent, #8c7343, transparent);
+            margin: 20px auto;
+        }
+
+        .photo-frame {
+            background: #fff;
+            padding: 10px;
+            padding-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transform: rotate(-2deg);
+            transition: transform 0.3s ease;
+        }
+        
+        .photo-frame:hover {
+            transform: rotate(0deg) scale(1.02);
+            z-index: 10;
+        }
+        
+        .photo-frame-alt {
+            transform: rotate(2deg);
+        }
+
+        .drop-cap:first-letter {
+            float: right;
+            font-size: 3.5em;
+            line-height: 0.8;
+            padding-left: 8px;
+            font-family: 'Amiri', serif;
+            color: #8c7343;
+        }
+
+        /* Elegant Button */
+        .btn-elegant {
+            background-color: #8c7343;
+            color: #fdf6e3;
+            border: 1px solid #705b33;
+            transition: all 0.3s ease;
+        }
+        .btn-elegant:hover {
+            background-color: #705b33;
+            box-shadow: 0 4px 12px rgba(140, 115, 67, 0.4);
+        }
+
+        /* Scrollbar styling for pages */
+        .page-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .page-container::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05); 
+        }
+        .page-container::-webkit-scrollbar-thumb {
+            background: #8c7343; 
+            border-radius: 10px;
+        }
+
+        /* Custom Vinyl Record Styling */
+        .vinyl-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 1.5rem 0;
+            width: 100%;
+        }
+        .vinyl {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #111 25%, #222 50%, #111 75%);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4), inset 0 0 10px rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .vinyl-grooves {
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 0 0 4px #111, 0 0 0 5px rgba(255,255,255,0.05), 0 0 0 10px #111, 0 0 0 11px rgba(255,255,255,0.05), 0 0 0 16px #111, 0 0 0 17px rgba(255,255,255,0.05);
+        }
+        .vinyl-label {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: #8c7343; 
+            border: 2px solid #222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+            background-image: linear-gradient(45deg, #8c7343, #a68a55);
+        }
+        .vinyl-hole {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #fdf6e3; 
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+        }
+        .spin {
+            animation: spin 3s linear infinite;
+        }
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Custom Select Styling */
+        .song-selector {
+            width: 80%;
+            max-width: 300px;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #8c7343;
+            background-color: #fdf6e3;
+            color: #3d2b1f;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            outline: none;
+            cursor: pointer;
+            appearance: none; /* Remove default arrow */
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%238c7343%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: left 15px top 50%; /* Positioned on left for RTL */
+            background-size: 12px auto;
+            text-align: center;
+        }
+        
+        .song-selector:focus {
+            box-shadow: 0 0 0 2px rgba(140, 115, 67, 0.3);
+        }
+
+        .play-btn {
+            margin-top: 20px;
+            padding: 8px 24px;
+            background-color: #3d2b1f;
+            color: #fdf6e3;
+            border-radius: 30px;
+            border: 1px solid #8c7343;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
+        }
+        .play-btn:hover {
+            background-color: #8c7343;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        /* 
+           Crucial Fix: Placing the YouTube iframe fully loaded, normal size 
+           but way off-screen. This tricks YouTube into allowing audio playback 
+           without user visibility.
+        */
+        .hidden-player-container {
+            position: fixed;
+            left: -9999px;
+            top: -9999px;
+            width: 320px;
+            height: 240px;
+            overflow: hidden;
+            z-index: -9999;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased selection:bg-[#8c7343] selection:text-white">
+
+    <!-- Password Gate Screen -->
+    <div id="login-screen" class="w-full max-w-md p-8 mx-4 z-50 flex flex-col items-center justify-center">
+        <div class="paper rounded-lg p-10 w-full text-center relative overflow-hidden border-2 border-[#8c7343]/30">
+            <!-- Decorative Corners -->
+            <div class="absolute top-2 right-2 w-8 h-8 border-t-2 border-r-2 border-[#8c7343] opacity-50"></div>
+            <div class="absolute top-2 left-2 w-8 h-8 border-t-2 border-l-2 border-[#8c7343] opacity-50"></div>
+            <div class="absolute bottom-2 right-2 w-8 h-8 border-b-2 border-r-2 border-[#8c7343] opacity-50"></div>
+            <div class="absolute bottom-2 left-2 w-8 h-8 border-b-2 border-l-2 border-[#8c7343] opacity-50"></div>
+
+            <h1 class="text-4xl mb-2 text-[#8c7343] serif-font">قصة سرية</h1>
+            <div class="divider mb-6"></div>
+            <p class="mb-6 text-sm italic text-gray-600">لكي تفتح صفحات هذا الكتاب، يجب أن تعرف الكلمة السرية.</p>
+            
+            <input type="password" id="password-input" placeholder="أدخل الكلمة السرية..." 
+                   class="w-full p-3 mb-2 text-center border-b-2 border-gray-300 bg-transparent focus:outline-none focus:border-[#8c7343] transition-colors"
+                   onkeypress="handleKeyPress(event)">
+            
+            <p id="error-message" class="text-red-500 text-sm h-5 mb-4 opacity-0 transition-opacity">كلمة المرور خاطئة. حاول مرة أخرى.</p>
+            
+            <button onclick="checkPassword()" class="btn-elegant w-full py-3 rounded-md font-medium tracking-wide uppercase text-sm">
+                افتح القصة
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Book Container (Hidden until unlocked) -->
+    <div id="book-screen" class="hidden w-full max-w-3xl h-[90vh] md:h-[80vh] mx-4 relative flex flex-col">
+        
+        <div class="paper flex-grow rounded-sm sm:rounded-md p-6 sm:p-12 overflow-y-auto overflow-x-hidden page-container border-r-8 border-[#3d2b1f]">
+            
+            <!-- PAGE 0: Cover / Intro -->
+            <div class="page active flex flex-col justify-center items-center h-full text-center" id="page-0">
+                <p class="italic text-gray-500 mb-4 tracking-widest text-sm">حكاية قلبين</p>
+                <h1 class="text-6xl sm:text-7xl font-bold mb-6 text-[#1a1a1a] leading-tight serif-font">قصتنا</h1>
+                <div class="divider w-3/4 mb-6"></div>
+                <h2 class="text-3xl text-[#8c7343] serif-font">عزام ورغد</h2>
+                <p class="mt-12 text-sm text-gray-500 font-medium">كُتبت بحُب، لتدوم إلى الأبد.</p>
+            </div>
+
+            <!-- PAGE 1: Chapter 1 -->
+            <div class="page" id="page-1">
+                <h3 class="text-2xl text-[#8c7343] mb-2 text-center serif-font">الفصل الأول</h3>
+                <h2 class="text-4xl font-bold mb-8 text-center border-b border-gray-300 pb-4 serif-font">بداية الحكاية</h2>
+                
+                <p class="text-lg leading-relaxed mb-6 drop-cap text-justify">
+                    قبل أن تظهري في حياتي، كان عالمي مجرد سطور عادية ومكتوبة بلغة بسيطة—هادئة، متوقعة، وروتينية. ولكن بعد ذلك جاءت "رغد". اسمٌ يبدو وكأنه أجمل مقطوعة موسيقية، وروحٌ شعرتُ معها على الفور بأنني وجدت وطني.
+                </p>
+                <p class="text-lg leading-relaxed mb-6 text-justify">
+                    أنا عزام، وهذه الصفحات هي توثيق لكيف وجد قلبي أخيراً إيقاعه الحقيقي. يقولون إنك عندما تقابل الشخص المقدر لك، يتوقف الزمن. لم أكن أؤمن بهذه العبارات الشاعرية حتى التقت أعيننا، وفجأة، تلاشى بقية الكون في الخلفية ولم يتبقَ سواكِ.
+                </p>
+                
+                <!-- Image Placeholder -->
+                <div class="flex justify-center mt-8 mb-4">
+                    <div class="photo-frame w-64 max-w-full">
+                        <img src="https://placehold.co/400x300/e2e8f0/64748b?text=صورة+لقائنا+الأول" alt="عزام ورغد" class="w-full h-auto border border-gray-200">
+                        <p class="text-center mt-2 text-sm italic text-gray-600">حيث بدأ كل شيء...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 2: Chapter 2 -->
+            <div class="page" id="page-2">
+                <h3 class="text-2xl text-[#8c7343] mb-2 text-center serif-font">الفصل الثاني</h3>
+                <h2 class="text-4xl font-bold mb-8 text-center border-b border-gray-300 pb-4 serif-font">مُلهمتي الفاتنة</h2>
+                
+                <p class="text-lg leading-relaxed mb-6 drop-cap text-justify">
+                    في كل مرة أنظر إليكِ يا رغد، أرى لوحة فنية يعجز أي فنان عن رسم تفاصيلها. ابتسامتكِ تجلب النور لأيامي المظلمة، وضحكتكِ هي الموسيقى التصويرية لأسعد لحظاتي.
+                </p>
+                <p class="text-lg leading-relaxed mb-6 text-justify">
+                    أنتِ لستِ فقط المرأة التي أحبها؛ بل أنتِ أقرب صديقة لي، وإلهامي الأعمق، ومغامرتي الأجمل. مع مرور كل يوم، ينمو حبي لكِ ويتجذر أعمق، وينسج نفسه في نسيج كياني وشخصيتي.
+                </p>
+
+                <!-- Image Placeholder 2 -->
+                <div class="flex justify-center mt-8 mb-4">
+                    <div class="photo-frame photo-frame-alt w-64 max-w-full">
+                        <img src="https://placehold.co/400x400/e2e8f0/64748b?text=صورة+رغد" alt="رغد" class="w-full h-auto border border-gray-200 object-cover aspect-square">
+                        <p class="text-center mt-2 text-sm italic text-gray-600">رغد، جميلتي ومُهجة قلبي.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 3: Chapter 3 (Songs/Audio) -->
+            <div class="page" id="page-3">
+                <h3 class="text-2xl text-[#8c7343] mb-2 text-center serif-font">الفصل الثالث</h3>
+                <h2 class="text-4xl font-bold mb-8 text-center border-b border-gray-300 pb-4 serif-font">ألحان حبنا</h2>
+                
+                <p class="text-lg leading-relaxed mb-4 text-justify text-center italic text-gray-600">
+                    "بعض الكلمات لا يمكن قولها، بل يجب أن تُغنى. هذه الأغاني تحكي ما يعجز لساني عن وصفه لكِ."
+                </p>
+
+                <div class="flex flex-col items-center">
+                    <!-- Vinyl Player -->
+                    <div class="vinyl-container w-full bg-[#f5eeda] p-6 rounded-lg shadow-sm border border-[#8c7343]/20">
+                        <h4 class="text-xl font-bold text-[#3d2b1f] mb-4 serif-font text-center">اختاري لحننا</h4>
+                        
+                        <!-- Song Selector with direct YouTube IDs -->
+                        <select id="song-selector" class="song-selector" onchange="changeSong()">
+                            <option value="6MX7vQuRVzQ" selected>بحط قلبي بين ايدينك هديه</option>
+                            <option value="B8w0eUMFxGs">يا كل عمري</option>
+                            <option value="aiDhbMRsPuY">من عرفتك</option>
+                            <option value="38y_Znfe-rw">تفنن</option>
+                            <option value="7bPPHAK4lzY">ما كنت ادري</option>
+                            <option value="J8AM-9KTHDk">سهام الحب</option>
+                            <option value="nQV03lAgXe8">عيوني لك</option>
+                            <option value="h2ER4uPTTDQ">من يقول؟</option>
+                        </select>
+                        
+                        <p id="current-song-title" class="text-md font-bold text-[#8c7343] mb-6 text-center">راشد الماجد - بحط قلبي بين ايدينك هديه</p>
+                        
+                        <div id="vinyl-record" class="vinyl">
+                            <div class="vinyl-grooves"></div>
+                            <div class="vinyl-label">
+                                <div class="vinyl-hole"></div>
+                            </div>
+                        </div>
+
+                        <!-- Invisible YouTube API Player container -->
+                        <div class="hidden-player-container">
+                            <div id="youtube-player"></div>
+                        </div>
+                        
+                        <button id="play-pause-btn" onclick="toggleAudio()" class="play-btn">
+                            <svg id="play-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                            <svg id="pause-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                            <span id="play-text">تشغيل اللحن</span>
+                        </button>
+                        
+                        <span id="audio-error" class="text-red-500 text-sm mt-3 hidden text-center font-bold">عذراً، تعذر تشغيل المقطع. تأكد من اتصالك بالإنترنت.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 4: Chapter 4 (Photo Gallery) -->
+            <div class="page" id="page-4">
+                <h3 class="text-2xl text-[#8c7343] mb-2 text-center serif-font">الفصل الرابع</h3>
+                <h2 class="text-4xl font-bold mb-8 text-center border-b border-gray-300 pb-4 serif-font">صندوق الذكريات</h2>
+                
+                <p class="text-md mb-6 text-center text-gray-600">
+                    لحظاتنا معاً هي أثمن ما أملك، كل صورة هنا تخفي وراءها قصة، وضحكة، ونبضة قلب.
+                </p>
+
+                <div class="grid grid-cols-2 gap-4 mt-6 pb-8">
+                    <!-- Gallery Photo 1 -->
+                    <div class="photo-frame w-full">
+                        <img src="https://placehold.co/300x300/e2e8f0/64748b?text=ذكرى+1" class="w-full h-auto border border-gray-200 aspect-square object-cover">
+                    </div>
+                    <!-- Gallery Photo 2 -->
+                    <div class="photo-frame photo-frame-alt w-full mt-4">
+                        <img src="https://placehold.co/300x300/e2e8f0/64748b?text=ذكرى+2" class="w-full h-auto border border-gray-200 aspect-square object-cover">
+                    </div>
+                    <!-- Gallery Photo 3 -->
+                    <div class="photo-frame photo-frame-alt w-full">
+                        <img src="https://placehold.co/300x300/e2e8f0/64748b?text=ذكرى+3" class="w-full h-auto border border-gray-200 aspect-square object-cover">
+                    </div>
+                    <!-- Gallery Photo 4 -->
+                    <div class="photo-frame w-full mt-4">
+                        <img src="https://placehold.co/300x300/e2e8f0/64748b?text=ذكرى+4" class="w-full h-auto border border-gray-200 aspect-square object-cover">
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 5: Conclusion -->
+            <div class="page" id="page-5">
+                <h3 class="text-2xl text-[#8c7343] mb-2 text-center serif-font">الفصل الأخير</h3>
+                <h2 class="text-4xl font-bold mb-8 text-center border-b border-gray-300 pb-4 serif-font">إلى الأبد</h2>
+                
+                <p class="text-lg leading-relaxed mb-6 drop-cap text-justify">
+                    هذا الكتاب، يا حبيبتي، ليس له نهاية. الصفحات القادمة بيضاء، تنتظرنا لنملأها بأحلامنا المشتركة، وبتغلبنا على مخاوفنا، وبسيل لا ينتهي من الذكريات الجميلة.
+                </p>
+                <p class="text-lg leading-relaxed mb-8 text-justify">
+                    طالما أن هناك أنفاساً في صدري، أعدك بأن أمسك بيدك عبر كل فصل من فصول الحياة. أنتِ حاضري، وكل غدي. أحبك يا رغد، أكثر مما يمكن للكلمات أن تعبر عنه.
+                </p>
+
+                <div class="text-center mt-12">
+                    <p class="text-xl italic mb-2 text-gray-600">المحب لكِ، دائماً وأبداً،</p>
+                    <h2 class="text-5xl text-[#8c7343] mt-4 serif-font">عزام</h2>
+                </div>
+                
+                <div class="flex justify-center space-x-4 mt-16 text-[#8c7343] text-2xl">
+                    <span class="mx-2">♥</span><span class="mx-2">♥</span><span class="mx-2">♥</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Book Navigation -->
+        <div class="mt-6 flex justify-between items-center px-4 w-full text-white z-10" dir="ltr">
+            <button id="next-btn" onclick="nextPage()" class="px-4 py-2 bg-[#1a1a1a] rounded hover:bg-[#333] transition-colors flex items-center border border-gray-700">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                الصفحة التالية
+            </button>
+            
+            <span id="page-indicator" class="font-serif text-gray-400">صفحة ١ من ٦</span>
+            
+            <button id="prev-btn" onclick="prevPage()" class="opacity-50 cursor-not-allowed px-4 py-2 bg-[#1a1a1a] rounded hover:bg-[#333] transition-colors flex items-center border border-gray-700" disabled>
+                الصفحة السابقة
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Password Logic
+        const CORRECT_PASSWORD = "هلقهلق";
+        
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                checkPassword();
+            }
+        }
+
+        function checkPassword() {
+            const input = document.getElementById('password-input').value;
+            const errorMsg = document.getElementById('error-message');
+            
+            if (input === CORRECT_PASSWORD) {
+                errorMsg.style.opacity = '0';
+                
+                const loginScreen = document.getElementById('login-screen');
+                loginScreen.style.transition = 'opacity 0.8s ease';
+                loginScreen.style.opacity = '0';
+                
+                setTimeout(() => {
+                    loginScreen.classList.add('hidden');
+                    
+                    const bookScreen = document.getElementById('book-screen');
+                    bookScreen.classList.remove('hidden');
+                    void bookScreen.offsetWidth;
+                    bookScreen.style.animation = 'fadeInUp 1s ease forwards';
+                }, 800);
+            } else {
+                errorMsg.style.opacity = '1';
+                const loginBox = document.querySelector('#login-screen > div');
+                loginBox.style.transform = 'translateX(-10px)';
+                setTimeout(() => loginBox.style.transform = 'translateX(10px)', 100);
+                setTimeout(() => loginBox.style.transform = 'translateX(-10px)', 200);
+                setTimeout(() => loginBox.style.transform = 'translateX(10px)', 300);
+                setTimeout(() => loginBox.style.transform = 'translateX(0)', 400);
+            }
+        }
+
+        // Book Navigation Logic
+        let currentPage = 0;
+        const totalPages = 6; // Pages 0 to 5
+        const arabicNumbers = ['١', '٢', '٣', '٤', '٥', '٦'];
+
+        function updateButtons() {
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const indicator = document.getElementById('page-indicator');
+
+            if (currentPage === 0) {
+                prevBtn.disabled = true;
+                prevBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                prevBtn.disabled = false;
+                prevBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+
+            if (currentPage === totalPages - 1) {
+                nextBtn.disabled = true;
+                nextBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                nextBtn.disabled = false;
+                nextBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+
+            indicator.textContent = `صفحة ${arabicNumbers[currentPage]} من ${arabicNumbers[totalPages-1]}`;
+            
+            // Automatically pause the music when turning pages
+            if (player && typeof player.pauseVideo === 'function') {
+                player.pauseVideo();
+            }
+        }
+
+        function showPage(index) {
+            for (let i = 0; i < totalPages; i++) {
+                const page = document.getElementById(`page-${i}`);
+                page.classList.remove('active');
+                
+                if (i < index) {
+                    page.classList.add('prev');
+                } else {
+                    page.classList.remove('prev');
+                }
+            }
+
+            document.getElementById(`page-${index}`).classList.add('active');
+            document.querySelector('.page-container').scrollTop = 0;
+            updateButtons();
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                showPage(currentPage);
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 0) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (!document.getElementById('book-screen').classList.contains('hidden')) {
+                if (event.key === 'ArrowLeft') {
+                    nextPage();
+                } else if (event.key === 'ArrowRight') {
+                    prevPage();
+                }
+            }
+        });
+
+        // Add custom animation styles dynamically
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes fadeInUp {
+                from { opacity: 0; transform: translateY(30px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // YouTube API Loading
+        let player;
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        const songTitles = {
+            "6MX7vQuRVzQ": "بحط قلبي بين ايدينك هديه",
+            "B8w0eUMFxGs": "يا كل عمري",
+            "aiDhbMRsPuY": "من عرفتك",
+            "38y_Znfe-rw": "تفنن",
+            "7bPPHAK4lzY": "ما كنت ادري",
+            "J8AM-9KTHDk": "سهام الحب",
+            "nQV03lAgXe8": "عيوني لك",
+            "h2ER4uPTTDQ": "من يقول؟"
+        };
+
+        // When YouTube Player Engine is Ready
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '240',
+                width: '320',
+                videoId: '6MX7vQuRVzQ', // Default Song
+                playerVars: {
+                    'playsinline': 1,
+                    'controls': 0,
+                    'disablekb': 1,
+                    'fs': 0,
+                    'modestbranding': 1,
+                    'rel': 0,
+                    'enablejsapi': 1,
+                    'origin': window.location.origin
+                },
+                events: {
+                    'onStateChange': onPlayerStateChange,
+                    'onError': onPlayerError,
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            // Player loaded successfully and is ready to play.
+            console.log("YouTube Player is ready.");
+        }
+
+        // Mapped to change icons/animations based on player status
+        function onPlayerStateChange(event) {
+            const record = document.getElementById('vinyl-record');
+            const playIcon = document.getElementById('play-icon');
+            const pauseIcon = document.getElementById('pause-icon');
+            const playText = document.getElementById('play-text');
+
+            if (event.data === YT.PlayerState.PLAYING) {
+                record.classList.add('spin');
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+                playText.textContent = 'إيقاف مؤقت';
+            } else {
+                record.classList.remove('spin');
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+                playText.textContent = 'تشغيل اللحن';
+            }
+        }
+
+        function onPlayerError(e) {
+            console.error("YouTube Error: ", e);
+            const errorMsg = document.getElementById('audio-error');
+            errorMsg.classList.remove('hidden');
+        }
+
+        function changeSong() {
+            const selector = document.getElementById('song-selector');
+            const titleDisplay = document.getElementById('current-song-title');
+            
+            const selectedVideoId = selector.value;
+            const songName = songTitles[selectedVideoId] || "أغنية";
+
+            // Update visible Title
+            titleDisplay.textContent = `راشد الماجد - ${songName}`;
+
+            if (player && typeof player.loadVideoById === 'function') {
+                // Instantly load and play the new song
+                player.loadVideoById(selectedVideoId);
+            }
+        }
+
+        function toggleAudio() {
+            if (!player || typeof player.getPlayerState !== 'function') {
+                // Fallback attempt to load the player if API initialization was delayed
+                onYouTubeIframeAPIReady();
+                return;
+            }
+
+            const state = player.getPlayerState();
+            if (state === YT.PlayerState.PLAYING) {
+                player.pauseVideo();
+            } else {
+                // Attempt to play and handle browser play blocks
+                player.playVideo();
+            }
+        }
+    </script>
+</body>
+</html>
