@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أميرتي </title>
+    <title>أميرتي</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;500;600&display=swap" rel="stylesheet">
     
@@ -251,7 +251,7 @@
             <div class="absolute bottom-2 right-2 w-8 h-8 border-b-2 border-r-2 border-[#8c7343] opacity-50"></div>
             <div class="absolute bottom-2 left-2 w-8 h-8 border-b-2 border-l-2 border-[#8c7343] opacity-50"></div>
 
-            <h1 class="text-4xl mb-2 text-[#8c7343] serif-font">قصة سرية </h1>
+            <h1 class="text-4xl mb-2 text-[#8c7343] serif-font">قصة سرية</h1>
             <div class="divider mb-6"></div>
             <p class="mb-6 text-sm italic text-gray-600">لكي تفتح صفحات هذا الكتاب، يجب أن تعرف الكلمة السرية.</p>
             
@@ -268,9 +268,29 @@
     </div>
 
     <!-- Main Book Container (Hidden until unlocked) -->
-    <div id="book-screen" class="hidden w-full max-w-3xl h-[90vh] md:h-[80vh] mx-4 relative flex flex-col">
+    <div id="book-screen" class="hidden w-full max-w-3xl h-[85vh] md:h-[80vh] mx-4 relative flex flex-col">
         
-        <div class="paper flex-grow rounded-sm sm:rounded-md p-6 sm:p-12 overflow-y-auto overflow-x-hidden page-container border-r-8 border-[#3d2b1f]">
+        <!-- Elegant Circular Floating Navigation Buttons on the sides -->
+        <!-- Next Page Button (Left on RTL book) -->
+        <button id="next-btn" onclick="nextPage()" 
+                class="absolute top-1/2 -translate-y-1/2 left-2 md:-left-16 w-12 h-12 rounded-full bg-[#8c7343] text-[#fdf6e3] border-2 border-[#705b33] flex items-center justify-center shadow-2xl hover:bg-[#705b33] hover:scale-110 active:scale-95 transition-all z-40"
+                title="الصفحة التالية">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+            </svg>
+        </button>
+        
+        <!-- Previous Page Button (Right on RTL book) -->
+        <button id="prev-btn" onclick="prevPage()" 
+                class="absolute top-1/2 -translate-y-1/2 right-2 md:-right-16 w-12 h-12 rounded-full bg-[#1a1a1a]/90 text-[#fdf6e3] border-2 border-gray-700 flex items-center justify-center shadow-2xl hover:bg-[#333] hover:scale-110 active:scale-95 transition-all z-40 opacity-40 cursor-not-allowed" 
+                disabled
+                title="الصفحة السابقة">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+            </svg>
+        </button>
+
+        <div class="paper flex-grow rounded-sm sm:rounded-md p-6 sm:p-12 pb-16 sm:pb-20 overflow-y-auto overflow-x-hidden page-container border-r-8 border-[#3d2b1f] relative">
             
             <!-- PAGE 0: Cover / Intro -->
             <div class="page active flex flex-col justify-center items-center h-full text-center" id="page-0">
@@ -278,7 +298,23 @@
                 <h1 class="text-6xl sm:text-7xl font-bold mb-6 text-[#1a1a1a] leading-tight serif-font">القلب</h1>
                 <div class="divider w-3/4 mb-6"></div>
                 <h2 class="text-3xl text-[#8c7343] serif-font">A&R</h2>
-                <p class="mt-12 text-sm text-gray-500 font-medium">كُتبت بحُب، لتدوم إلى الأبد.</p>
+                <p class="mt-8 text-sm text-gray-500 font-medium">كُتبت بحُب، لتدوم إلى الأبد.</p>
+
+                <!-- PAGE 0 CARTOON: Cozy Sleeping Scene -->
+                <div class="flex flex-col items-center justify-center mt-12 opacity-90 select-none">
+                    <div class="relative w-24 h-16 flex items-end justify-center" dir="ltr">
+                        <!-- Cozy sleeping Zzz symbols -->
+                        <div class="absolute top-0 w-full flex justify-center gap-1">
+                            <span class="text-xs text-[#8c7343] animate-pulse font-bold" style="animation-delay: 0s;">z</span>
+                            <span class="text-sm text-[#8c7343] animate-bounce font-bold -mt-1" style="animation-delay: 0.2s;">z</span>
+                            <span class="text-md text-[#8c7343] animate-pulse font-bold -mt-2" style="animation-delay: 0.4s;">Z</span>
+                        </div>
+                        <div class="flex items-end text-3xl leading-none pb-1 filter drop-shadow-sm">
+                            <span class="transform scale-x-[-1] translate-x-1" title="قطة نائمة">🐈💤</span>
+                            <span class="-translate-x-1" title="ديناصور نائم">🦖💤</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- PAGE 1: Chapter 1 -->
@@ -293,16 +329,15 @@
                     أنا عزام، وهنا أكتب لكِ وعنكِ.. لنوثق كيف عاد قلبي ينبض بالحياة حين التقت روحي بروحكِ. فجأة، صمت الكون بالكامل، تلاشت الأشياء من حولي، ولم أعد أرى سوى تفاصيلكِ.
                 </p>
                 
-                <!-- الرسمة اللطيفة (قطة وديناصور) -->
-                <div class="flex flex-col items-center justify-center my-6 opacity-90 select-none">
+                <!-- PAGE 1 CARTOON: Sweet Kissing Scene -->
+                <div class="flex flex-col items-center justify-center my-8 opacity-90 select-none">
                     <div class="relative w-24 h-16 flex items-end justify-center" dir="ltr">
-                        <!-- قلوب تطفو -->
+                        <!-- Floating red/pink hearts -->
                         <div class="absolute top-0 w-full flex justify-center gap-1.5">
                             <svg class="w-3 h-3 text-red-500 animate-pulse mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
                             <svg class="w-4 h-4 text-pink-500 animate-bounce -mt-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
                             <svg class="w-3 h-3 text-red-400 animate-pulse mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
                         </div>
-                        <!-- قطة وديناصور -->
                         <div class="flex items-end text-3xl leading-none drop-shadow-md pb-1">
                             <span class="transform scale-x-[-1] translate-x-1.5 z-10" title="قطة صغيرة">🐈</span>
                             <span class="-translate-x-1.5" title="ديناصور أخضر">🦖</span>
@@ -325,25 +360,27 @@
                 <h2 class="text-4xl font-bold mb-8 text-center border-b border-gray-300 pb-4 serif-font">مُلهمتي الفاتنة</h2>
                 
                 <p class="text-lg leading-relaxed mb-6 drop-cap text-justify">
-                    في كل مرة أتأمل فيها ملامحكِ، أرى لوحةً فنية يعجز الرسام عن رسمها، ويعجز الشاعر عن وصفكِ، ويحتار لساني في غزلكِ. ابتسامتكِ وحدها تبدد عتمة أيامي، وصوت ضحكتكِ هو الموسيقى التصويرية لأسعد لحظاتي.
+                    في كل مرة أتأمل فيها ملامحكِ، أرى لوحةً فنية يعجز الرسام عن رسمها، ويعجز الشاعر عن وصفها، ويحتار لساني في غزلكِ. ابتسامتكِ وحدها تبدد عتمة أيامي، وصوت ضحكتكِ هو الموسيقى التصويرية لأسعد لحظاتي.
                 </p>
                 <p class="text-lg leading-relaxed mb-6 text-justify">
                     أنتِ لستِ مجرد امرأةٍ أحببتُها، بل أنتِ المحور الذي تدور حوله حياتي كلها. أنتِ حبيبتي، وأميرتي في موطني، وصديقتي الأقرب، وإلهامي الأعمق، ومغامرتي الأجمل. ومع مرور كل يوم، ينمو حبي لكِ ويتجذر في أعماقي، حتى أصبح جزءاً لا يتجزأ مني.
                 </p>
 
-                <!-- الرسمة اللطيفة (قطة وديناصور) -->
-                <div class="flex flex-col items-center justify-center my-6 opacity-90 select-none">
-                    <div class="relative w-24 h-16 flex items-end justify-center" dir="ltr">
-                        <!-- قلوب تطفو -->
-                        <div class="absolute top-0 w-full flex justify-center gap-1.5">
-                            <svg class="w-3 h-3 text-red-500 animate-pulse mt-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
-                            <svg class="w-4 h-4 text-pink-500 animate-bounce -mt-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
-                            <svg class="w-3 h-3 text-red-400 animate-pulse mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
+                <!-- PAGE 2 CARTOON: Dinosaur Offering a Rose -->
+                <div class="flex flex-col items-center justify-center my-8 opacity-90 select-none">
+                    <div class="relative w-28 h-16 flex items-end justify-center" dir="ltr">
+                        <!-- Sweet blush indicators -->
+                        <div class="absolute top-0 w-full flex justify-center gap-1">
+                            <span class="text-sm animate-pulse">🌸</span>
+                            <span class="text-xs animate-bounce -mt-1">💖</span>
                         </div>
-                        <!-- قطة وديناصور -->
-                        <div class="flex items-end text-3xl leading-none drop-shadow-md pb-1">
-                            <span class="transform scale-x-[-1] translate-x-1.5 z-10" title="قطة صغيرة">🐈</span>
-                            <span class="-translate-x-1.5" title="ديناصور أخضر">🦖</span>
+                        <div class="flex items-end text-3xl leading-none pb-1 filter drop-shadow">
+                            <!-- Dinosaur holding a red rose -->
+                            <span class="translate-x-2 flex items-end" title="ديناصور يهدي وردة">
+                                <span>🦖</span><span class="text-lg -ml-2 -translate-y-1 transform rotate-12 animate-bounce">🌹</span>
+                            </span>
+                            <!-- Blushing cat -->
+                            <span class="transform scale-x-[-1] -translate-x-1 animate-pulse" title="قطة خجولة">🐈</span>
                         </div>
                     </div>
                 </div>
@@ -352,7 +389,7 @@
                 <div class="flex justify-center mt-8 mb-4">
                     <div class="photo-frame photo-frame-alt w-64 max-w-full">
                         <img src="https://placehold.co/400x400/e2e8f0/64748b?text=صورة+رغد" alt="رغد" class="w-full h-auto border border-gray-200 object-cover aspect-square">
-                        <p class="text-center mt-2 text-sm italic text-gray-600">رغد، جميلتي ومُهجة قلبي.</p>
+                        <p class="text-center mt-2 text-sm italic text-gray-600">أميرتي، جميلتي ومُهجة قلبي.</p>
                     </div>
                 </div>
             </div>
@@ -383,8 +420,24 @@
                             <option value="h2ER4uPTTDQ">من يقول؟</option>
                         </select>
                         
-                        <p id="current-song-title" class="text-md font-bold text-[#8c7343] mb-6 text-center">راشد الماجد - بحط قلبي بين ايدينك هديه</p>
+                        <p id="current-song-title" class="text-md font-bold text-[#8c7343] mb-4 text-center">راشد الماجد - بحط قلبي بين ايدينك هديه</p>
                         
+                        <!-- PAGE 3 CARTOON: Music Dancing Scene -->
+                        <div class="flex flex-col items-center justify-center mb-6 opacity-90 select-none">
+                            <div class="relative w-28 h-12 flex items-end justify-center" dir="ltr">
+                                <!-- Floating musical notes -->
+                                <div class="absolute top-0 w-full flex justify-center gap-2">
+                                    <span class="text-sm text-[#8c7343] animate-bounce" style="animation-delay: 0.1s;">🎶</span>
+                                    <span class="text-xs text-[#8c7343] animate-pulse -mt-1" style="animation-delay: 0.4s;">🎵</span>
+                                    <span class="text-sm text-[#8c7343] animate-bounce" style="animation-delay: 0.7s;">🎧</span>
+                                </div>
+                                <div class="flex items-end text-3xl leading-none filter drop-shadow gap-1">
+                                    <span class="transform scale-x-[-1] animate-bounce" style="animation-duration: 1.5s;" title="قطة ترقص">🐈</span>
+                                    <span class="animate-bounce" style="animation-duration: 1.8s;" title="ديناصور يرقص">🦖</span>
+                                </div>
+                            </div>
+                        </div>
+
                         <div id="vinyl-record" class="vinyl">
                             <div class="vinyl-grooves"></div>
                             <div class="vinyl-label">
@@ -416,6 +469,24 @@
                 <p class="text-md mb-6 text-center text-gray-600">
                     لحظاتنا معاً هي أثمن ما أملك، كل صورة هنا تخفي وراءها قصة، وضحكة، ونبضة قلب.
                 </p>
+
+                <!-- PAGE 4 CARTOON: Dinosaur Photographing the Cat -->
+                <div class="flex flex-col items-center justify-center my-6 opacity-90 select-none">
+                    <div class="relative w-28 h-16 flex items-end justify-center" dir="ltr">
+                        <!-- Camera Flash -->
+                        <div class="absolute top-0 w-full flex justify-center">
+                            <span class="text-xl text-yellow-500 animate-ping opacity-75">✨</span>
+                        </div>
+                        <div class="flex items-end text-3xl leading-none pb-1 filter drop-shadow">
+                            <!-- Dinosaur holding a camera -->
+                            <span class="translate-x-2 flex items-end" title="ديناصور يصور">
+                                <span>🦖</span><span class="text-lg -ml-2 -translate-y-1 transform animate-pulse">📸</span>
+                            </span>
+                            <!-- Posing cat -->
+                            <span class="transform scale-x-[-1] -translate-x-2 animate-bounce" title="قطة مودل">🐈✨</span>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="grid grid-cols-2 gap-4 mt-6 pb-8">
                     <!-- Gallery Photo 1 -->
@@ -449,31 +520,38 @@
                     طالما أن هناك أنفاساً في صدري، أعدك بأن أمسك بيدك عبر كل فصل من فصول الحياة. أنتِ حاضري، وكل غدي. أحبك يا أميرتي، أكثر مما يمكن للكلمات أن تعبر عنه.
                 </p>
 
-                <div class="text-center mt-12">
+                <!-- PAGE 5 CARTOON: Warm Hugging Scene -->
+                <div class="flex flex-col items-center justify-center my-6 opacity-90 select-none">
+                    <div class="relative w-24 h-16 flex items-end justify-center" dir="ltr">
+                        <!-- Red hearts floating -->
+                        <div class="absolute top-0 w-full flex justify-center gap-1">
+                            <span class="text-sm animate-pulse text-red-500">❤️</span>
+                            <span class="text-lg animate-bounce -mt-2 text-red-500">❤️</span>
+                            <span class="text-sm animate-pulse text-red-500">❤️</span>
+                        </div>
+                        <div class="flex items-end text-4xl leading-none pb-1 filter drop-shadow">
+                            <span class="transform scale-x-[-1] translate-x-1" title="عناق">🐈</span>
+                            <span class="text-xl -mx-2 z-10 animate-pulse">💝</span>
+                            <span class="-translate-x-1" title="عناق">🦖</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-8">
                     <p class="text-xl italic mb-2 text-gray-600">المحب لكِ، دائماً وأبداً،</p>
                     <h2 class="text-5xl text-[#8c7343] mt-4 serif-font">عزام</h2>
                 </div>
                 
-                <div class="flex justify-center space-x-4 mt-16 text-[#8c7343] text-2xl">
+                <div class="flex justify-center space-x-4 mt-12 text-[#8c7343] text-2xl">
                     <span class="mx-2">♥</span><span class="mx-2">♥</span><span class="mx-2">♥</span>
                 </div>
             </div>
 
         </div>
 
-        <!-- Book Navigation -->
-        <div class="mt-6 flex justify-between items-center px-4 w-full text-white z-10" dir="ltr">
-            <button id="next-btn" onclick="nextPage()" class="px-4 py-2 bg-[#1a1a1a] rounded hover:bg-[#333] transition-colors flex items-center border border-gray-700">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                الصفحة التالية
-            </button>
-            
-            <span id="page-indicator" class="font-serif text-gray-400">صفحة ١ من ٦</span>
-            
-            <button id="prev-btn" onclick="prevPage()" class="opacity-50 cursor-not-allowed px-4 py-2 bg-[#1a1a1a] rounded hover:bg-[#333] transition-colors flex items-center border border-gray-700" disabled>
-                الصفحة السابقة
-                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-            </button>
+        <!-- Sleek Page Indicator Overlay -->
+        <div class="absolute -bottom-10 left-0 right-0 flex justify-center items-center z-10 text-white font-serif">
+            <span id="page-indicator" class="font-serif text-gray-400 bg-[#1a1a1a]/80 px-4 py-1.5 rounded-full border border-gray-800 text-sm">صفحة ١ من ٦</span>
         </div>
     </div>
 
@@ -527,20 +605,26 @@
             const nextBtn = document.getElementById('next-btn');
             const indicator = document.getElementById('page-indicator');
 
+            // Handle Previous Button States
             if (currentPage === 0) {
                 prevBtn.disabled = true;
-                prevBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                prevBtn.classList.add('opacity-40', 'cursor-not-allowed');
+                prevBtn.classList.remove('hover:bg-[#333]', 'hover:scale-110');
             } else {
                 prevBtn.disabled = false;
-                prevBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                prevBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+                prevBtn.classList.add('hover:bg-[#333]', 'hover:scale-110');
             }
 
+            // Handle Next Button States
             if (currentPage === totalPages - 1) {
                 nextBtn.disabled = true;
-                nextBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                nextBtn.classList.add('opacity-40', 'cursor-not-allowed');
+                nextBtn.classList.remove('hover:bg-[#705b33]', 'hover:scale-110');
             } else {
                 nextBtn.disabled = false;
-                nextBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                nextBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+                nextBtn.classList.add('hover:bg-[#705b33]', 'hover:scale-110');
             }
 
             indicator.textContent = `صفحة ${arabicNumbers[currentPage]} من ${arabicNumbers[totalPages-1]}`;
